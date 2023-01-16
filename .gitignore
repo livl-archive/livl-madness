@@ -73,5 +73,3 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 Assets/Mirror/Examples/*
-Assets/Mirror/Editor/Icon/MirrorIcon.png
-Assets/Scenes/MainScene/ReflectionProbe-0.exr
