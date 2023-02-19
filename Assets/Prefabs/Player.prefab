@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2438772479072518096}
   - component: {fileID: 2438772479072518110}
   - component: {fileID: 2438772479072518097}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2438772479798349270}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 2438772479961318396}
   - component: {fileID: 2438772479961318394}
   - component: {fileID: 2438772479961318397}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 2438772479961318399}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.99383813, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2438772479798349270}
@@ -219,9 +219,10 @@ GameObject:
   - component: {fileID: 6157429142167430516}
   - component: {fileID: 414956779628553532}
   - component: {fileID: 313954111192522216}
-  m_Layer: 0
+  - component: {fileID: 2925966898284264121}
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -234,7 +235,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2438772479995991687}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.2262014, y: 1.396, z: 1.965}
+  m_LocalPosition: {x: 1.2262014, y: 1.569, z: 1.965}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -337,6 +338,7 @@ MonoBehaviour:
   - {fileID: 2438772479995991682}
   - {fileID: 2438772479072518110}
   - {fileID: 2438772479072518097}
+  remoteLayerName: RemotePlayer
 --- !u!136 &7122343834633726087
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -425,6 +427,29 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &2925966898284264121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438772479995991687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ac042bed767d4d21b7de785e255add8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  weapon:
+    name: LivlArme
+    damage: 10
+    range: 100
+  cam: {fileID: 2438772479072518110}
+  mask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &2438772480314387092
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +461,7 @@ GameObject:
   - component: {fileID: 2438772480314387093}
   - component: {fileID: 2438772480314387088}
   - component: {fileID: 2438772480314387091}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +544,7 @@ GameObject:
   - component: {fileID: 2438772480521715146}
   - component: {fileID: 2438772480521715145}
   - component: {fileID: 2438772480521715144}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -602,7 +627,7 @@ GameObject:
   - component: {fileID: 2438772480983063824}
   - component: {fileID: 2438772480983063839}
   - component: {fileID: 2438772480983063838}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -683,7 +708,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2438772481037157338}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
