@@ -12,6 +12,10 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField]
     string remoteLayerName = "RemotePlayer";
     
+    [SerializeField]
+    private GameObject playerUIPrefab;
+    private GameObject playerUIInstance;
+    
     Camera sceneCamera;
     
     // Start is called before the first frame update
@@ -30,6 +34,9 @@ public class PlayerSetup : NetworkBehaviour
             {
                 sceneCamera.gameObject.SetActive(false);
             }
+            
+            // Create PlayerUI locally
+            playerUIInstance = Instantiate(playerUIPrefab);
         }
 
     }
@@ -47,12 +54,17 @@ public class PlayerSetup : NetworkBehaviour
         gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
     }
     
+    // When player quit the server
     private void OnDisable()
     {
+        Destroy(playerUIInstance);
+        
         if (sceneCamera != null)
         {
             sceneCamera.gameObject.SetActive(true);
         }
+        
+        //GameManager.UnregisterPlayer(transform.name);
     }
     
 }
