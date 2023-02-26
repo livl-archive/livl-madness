@@ -59,7 +59,7 @@ public class PlayerSetup : NetworkBehaviour
     {
         Destroy(playerUIInstance);
         
-        if (sceneCamera != null)
+        if (sceneCamera != null && isLocalPlayer)
         {
             sceneCamera.gameObject.SetActive(true);
         }
