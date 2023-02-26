@@ -73,3 +73,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 Assets/Mirror/Examples/*
+
+.DS_Store 
+**/.idea/
+.vscode/
+.idea/
