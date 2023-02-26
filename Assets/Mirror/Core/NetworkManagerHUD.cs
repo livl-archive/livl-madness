@@ -12,7 +12,7 @@ namespace Mirror
     public class NetworkManagerHUD : MonoBehaviour
     {
         NetworkManager manager;
-
+        
         public int offsetX;
         public int offsetY;
 
