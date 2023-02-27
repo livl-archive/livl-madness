@@ -23,6 +23,9 @@ public class PlayerShoot : NetworkBehaviour
 
     private void Update()
     {
+        if(PauseMenu.isOn)
+            return;
+        
         if (Input.GetButtonDown("Fire1"))
         {
             Shoot();

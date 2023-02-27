@@ -24,7 +24,25 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Compute velocity of the player movement
+        if(PauseMenu.isOn)
+        {
+			if(Cursor.lockState != CursorLockMode.None) 
+            {
+                Cursor.lockState = CursorLockMode.None; 
+            }			
+
+			motor.Move(Vector3.zero); // Stop the player
+			motor.Rotate(Vector3.zero); 
+			motor.RotateCamera(Vector3.zero); // Stop the camera to move
+			return;
+  		}
+
+		if(Cursor.lockState != CursorLockMode.Locked) 
+        {
+            Cursor.lockState = CursorLockMode.Locked; 
+        }
+
+		// Compute velocity of the player movement
         float xMove = Input.GetAxisRaw("Horizontal");
         float zMove = Input.GetAxisRaw("Vertical");
         
