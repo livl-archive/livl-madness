@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,16 @@ public class CanvasHUD : MonoBehaviour
         buttonHost.onClick.AddListener(ButtonHost);
         buttonServer.onClick.AddListener(ButtonServer);
         buttonClient.onClick.AddListener(ButtonClient);
+
+		// Parse command line argument for server builds
+		string[] args = System.Environment.GetCommandLineArgs();
+
+		foreach (string argument in args)
+		{
+			if (argument == "--server")
+				ButtonServer();
+		}
+		
 
         //This updates the Unity canvas, we have to manually call it every change, unlike legacy OnGUI.
         SetupCanvas();
