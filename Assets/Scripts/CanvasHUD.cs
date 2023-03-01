@@ -47,33 +47,60 @@ public class CanvasHUD : MonoBehaviour
     }
 
     // Invoked when the value of the text field changes.
-    public void ValueChangeCheck()
+    private void ValueChangeCheck()
     {
         NetworkManager.singleton.networkAddress = inputFieldAddress.text;
     }
 
-    public void ButtonHost()
+    private void ButtonHost()
     {
 		textInfo.text = "Please wait. Connecting...";
-		NetworkManager.singleton.StartHost();
+		
+		try
+		{
+			NetworkManager.singleton.StartHost();
+		}
+		catch (System.Exception e)
+		{
+			textInfo.text = "An error happened : " + e.Message;
+		}
+		
         SetupCanvas();
     }
 
-    public void ButtonServer()
+    private void ButtonServer()
     {
         textInfo.text = "Please wait. Connecting...";
-		NetworkManager.singleton.StartServer();
+        
+        try
+        {
+	        NetworkManager.singleton.StartServer();
+        }
+        catch (System.Exception e)
+        {
+	        textInfo.text = "An error happened : " + e.Message;
+        }
+        
         SetupCanvas();
     }
 
-    public void ButtonClient()
+    private void ButtonClient()
     {   
 		textInfo.text = "Please wait. Connecting...";
-		NetworkManager.singleton.StartClient();
+		
+		try
+		{
+			NetworkManager.singleton.StartClient();
+		}
+		catch (System.Exception e)
+		{
+			textInfo.text = "An error happened : " + e.Message;
+		}
+		
         SetupCanvas();
     }
 
-    public void SetupCanvas()
+    private void SetupCanvas()
     {
         // Here we will dump majority of the canvas UI that may be changed.
 		if (NetworkClient.isConnected && NetworkServer.active)
