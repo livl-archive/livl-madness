@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 414956779628553532}
   - component: {fileID: 313954111192522216}
   - component: {fileID: 2925966898284264121}
-  - component: {fileID: 2649931064332130517}
+  - component: {fileID: 4801751619637859672}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -452,8 +452,8 @@ MonoBehaviour:
   cam: {fileID: 2438772479072518110}
   mask:
     serializedVersion: 2
-    m_Bits: 256
---- !u!114 &2649931064332130517
+    m_Bits: 768
+--- !u!114 &4801751619637859672
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
