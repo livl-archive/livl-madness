@@ -15,6 +15,11 @@ public class MessageController : MonoBehaviour
     [Header("Config")]
     [SerializeField] private int defaultMessageDuration = 5;
 
+    void Start()
+    {
+        hideMessage();
+    }
+
     public void showMessage(string name, string message)
     {
         messagePanel.SetActive(true);
