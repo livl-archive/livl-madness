@@ -16,32 +16,27 @@ public class ProductItemController
     [SerializeField] private TMP_Text title;
     [SerializeField] private TMP_Text outOfStock;
     [SerializeField] private GameObject checkbox;
-    
+
     private Image checkboxImage;
 
     public void Start()
     {
         checkboxImage = checkbox.GetComponent<Image>();
-        
-        // TODO : Remove test
-        setText("Test");
-        setOutOfStock(false);
-        setChecked(false);
     }
 
     public void setText(String text)
     {
         title.text = text;
     }
-    
+
     public void setOutOfStock(bool isOutOfStock)
     {
         outOfStock.gameObject.SetActive(isOutOfStock);
     }
-    
+
     public void setChecked(bool isChecked)
     {
         checkboxImage.sprite = isChecked ? checkedSprite : uncheckedSprite;
     }
-    
+
 }

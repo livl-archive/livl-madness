@@ -5,38 +5,30 @@ using UnityEngine;
 public class ProductListController : MonoBehaviour
 {
 
-    [Header("Components")] 
+    [Header("Config")]
+    [SerializeField] private int checkAnimationDuration = 2;
+
+    [Header("Components")]
     [SerializeField] private int productCount = 4;
     [SerializeField] private GameObject productItemsList;
-    
+
     private List<ProductItemController> productItems = new List<ProductItemController>();
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
-        // Get all the products controller in the list
+
+        // For each child of productItemList, get the ProductItemController component
         foreach (Transform child in productItemsList.transform)
         {
             productItems.Add(child.GetComponent<ProductItemController>());
         }
 
-        // TODO : Remove test
-        List<string> names = new List<string>();
-        names.Add("Test1");
-        names.Add("Test2");
-        names.Add("Test3");
-        names.Add("Test4");
-
-        setProducts(names);
-
-        replaceProduct(0, "Nouveau produit");
-        
     }
 
     public void setProducts(List<string> names)
     {
-        
+
         if (names.Count != productCount)
         {
             Debug.LogError("ProductListController: setProducts: names count is not equal to productCount");
@@ -50,7 +42,7 @@ public class ProductListController : MonoBehaviour
             productItems[i].setChecked(false);
         }
     }
-    
+
     public void updateProductStock(int productIndex, bool isOutOfStock)
     {
         productItems[productIndex].setOutOfStock(isOutOfStock);
@@ -65,14 +57,14 @@ public class ProductListController : MonoBehaviour
 
     private IEnumerator delayedProductReplacement(int index, string name)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(checkAnimationDuration);
         replaceProduct(index, name);
     }
-    
-    public void checkAndReplaceProduct(int index, string nextProduct) 
+
+    public void checkAndReplaceProduct(int index, string nextProduct)
     {
         productItems[index].setChecked(true);
         StartCoroutine(delayedProductReplacement(index, nextProduct));
     }
-    
+
 }
