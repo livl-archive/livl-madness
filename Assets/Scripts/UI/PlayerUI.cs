@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerUI : MonoBehaviour
 {
+    private Player player;
+
+    private PlayerController controller;
 
     [SerializeField]
     private GameObject pauseMenu;
@@ -12,6 +15,12 @@ public class PlayerUI : MonoBehaviour
     private void Start()
     {
         SetPauseMenuVisibility(false);
+    }
+
+    public void SetPlayer(Player _player)
+    {
+        player = _player;
+        controller = player.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame

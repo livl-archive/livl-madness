@@ -14,14 +14,13 @@ public class PlayerSetup : NetworkBehaviour
     
     [SerializeField]
     private GameObject playerUIPrefab;
-    private GameObject playerUIInstance;
+    public GameObject playerUIInstance;
     
     Camera sceneCamera;
     
     // Start is called before the first frame update
     private void Start()
     {
-
         if (!isLocalPlayer)
         {
             DisableComponents();
@@ -29,16 +28,33 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
-            sceneCamera = Camera.main;
-            if (sceneCamera != null)
-            {
-                sceneCamera.gameObject.SetActive(false);
-            }
-            
-            // Create PlayerUI locally
+            // Création du UI du joueur local
             playerUIInstance = Instantiate(playerUIPrefab);
-        }
+            
+            // Configuration du UI
+            PlayerUI ui = playerUIInstance.GetComponent<PlayerUI>();
+            if(ui == null)
+            {
+                Debug.LogError("Pas de component PlayerUI sur playerUIInstance");
+            }
+            else
+            {
+                ui.SetPlayer(GetComponent<Player>());
+            }
 
+            GetComponent<Player>().Setup();
+        }
+    }
+    
+    [Command]
+    void CmdSetUsername(string playerID, string username)
+    {
+        Player player = GameManager.GetPlayer(playerID);
+        if(player != null)
+        {
+            Debug.Log(username + " has joined !");
+            player.username = username;
+        }
     }
 
     private void DisableComponents()
@@ -64,7 +80,7 @@ public class PlayerSetup : NetworkBehaviour
             sceneCamera.gameObject.SetActive(true);
         }
         
-        //GameManager.UnregisterPlayer(transform.name);
+        GameManager.UnregisterPlayer(transform.name);
     }
     
 }

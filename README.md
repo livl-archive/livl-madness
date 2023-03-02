@@ -22,3 +22,13 @@ The game features various power-ups and bonuses that can give players an edge ov
 The game ends when a player successfully collects all the required items on their shopping list and checks out at the register. The player with the fastest time to complete the shopping list and check out wins the game.
 
 Overall, "Livl Madness" is an exciting and competitive multiplayer game that will challenge players' skills and reflexes. It's a great way to experience the chaos and excitement of a busy supermarket while competing against friends and other players online.
+
+# Technical Specification
+
+## Run server
+
+*For Linux server :* : build the project with "Dedicated Server" parameters
+
+Then run the command :       
+`./<executable> --server --nographics --batch`
+
