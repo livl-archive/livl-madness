@@ -8,8 +8,6 @@ public class ObjectSpawner : MonoBehaviour
     public List<GameObject> items;
     public List<GameObject> spawnPoints;
 
-    private List<int> spawnIdxOccupied = new List<int>();
-
     void Start()
     {
         spawnPoints.ForEach(spawnPoint =>
