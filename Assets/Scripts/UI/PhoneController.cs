@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class MessageController : MonoBehaviour
+public class PhoneController : MonoBehaviour
 {
 
-    [Header("Components")]
+    [Header("Phone Components")]
+    [SerializeField] private TMP_Text timeText;
+    [SerializeField] private TMP_Text screenTitle;
+
+    [Header("Message Components")]
     [SerializeField] private GameObject messagePanel;
-    [SerializeField] private TMP_Text initialsText;
-    [SerializeField] private TMP_Text nameText;
+    [SerializeField] private TMP_Text messageInitials;
+    [SerializeField] private TMP_Text messageName;
     [SerializeField] private TMP_Text messageText;
+
+    [Header("Screens")]
+    [SerializeField] private GameObject productListScreen;
+
 
     [Header("Config")]
     [SerializeField] private int defaultMessageDuration = 5;
@@ -30,14 +38,14 @@ public class MessageController : MonoBehaviour
         // Make initials from first letter of each part
         if (nameParts.Length > 1)
         {
-            initialsText.text = nameParts[0][0].ToString() + nameParts[1][0].ToString();
+            messageInitials.text = nameParts[0][0].ToString() + nameParts[1][0].ToString();
         }
         else
         {
-            initialsText.text = name.Substring(0, 2);
+            messageInitials.text = name.Substring(0, 2);
         }
 
-        nameText.text = name;
+        messageName.text = name;
         messageText.text = message;
         StartCoroutine(delayedHideMessage(defaultMessageDuration));
     }
@@ -51,6 +59,16 @@ public class MessageController : MonoBehaviour
     public void hideMessage()
     {
         messagePanel.SetActive(false);
+    }
+
+    public void setScreenTitle(string title)
+    {
+        screenTitle.text = title;
+    }
+
+    public void setTimeText(string time)
+    {
+        timeText.text = time;
     }
 
 }
