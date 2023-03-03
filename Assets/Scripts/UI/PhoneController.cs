@@ -97,7 +97,6 @@ public class PhoneController : MonoBehaviour
         // Check if the screen exists
         if (!screens.ContainsKey(screen))
         {
-            Debug.LogError("Screen " + screen.ToString() + " does not exist");
             throw new System.Exception("Screen " + screen.ToString() + " does not exist");
         }
 
