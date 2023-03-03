@@ -18,14 +18,34 @@ public class PhoneController : MonoBehaviour
 
     [Header("Screens")]
     [SerializeField] private GameObject productListScreen;
+    [SerializeField] private GameObject pauseScreen;
 
 
     [Header("Config")]
     [SerializeField] private int defaultMessageDuration = 5;
 
+    private GameObject currentScreen;
+    private Dictionary<Phone.Screen, GameObject> screens = new Dictionary<Phone.Screen, GameObject>();
+
     void Start()
     {
         hideMessage();
+        generateScreens();
+
+        // Hide all screens
+        foreach (GameObject screen in screens.Values)
+        {
+            screen.SetActive(false);
+        }
+
+        // Start on the product list screen
+        navigate(Phone.Screen.ProductList);
+    }
+
+    private void generateScreens()
+    {
+        screens.Add(Phone.Screen.ProductList, productListScreen);
+        screens.Add(Phone.Screen.Pause, pauseScreen);
     }
 
     public void showMessage(string name, string message)
@@ -69,6 +89,28 @@ public class PhoneController : MonoBehaviour
     public void setTimeText(string time)
     {
         timeText.text = time;
+    }
+
+    public void navigate(Phone.Screen screen)
+    {
+
+        // Check if the screen exists
+        if (!screens.ContainsKey(screen))
+        {
+            Debug.LogError("Screen " + screen.ToString() + " does not exist");
+            throw new System.Exception("Screen " + screen.ToString() + " does not exist");
+        }
+
+        // Hide the previous screen
+        if (currentScreen != null)
+        {
+            currentScreen.SetActive(false);
+        }
+
+        // Show the new screen
+        screens[screen].SetActive(true);
+        currentScreen = screens[screen];
+        setScreenTitle(Phone.ScreenTitles[screen]);
     }
 
 }
