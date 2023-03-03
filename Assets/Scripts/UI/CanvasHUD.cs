@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,38 +32,75 @@ public class CanvasHUD : MonoBehaviour
         buttonServer.onClick.AddListener(ButtonServer);
         buttonClient.onClick.AddListener(ButtonClient);
 
+		// Parse command line argument for server builds
+		string[] args = System.Environment.GetCommandLineArgs();
+
+		foreach (string argument in args)
+		{
+			if (argument == "--server")
+				ButtonServer();
+		}
+		
+
         //This updates the Unity canvas, we have to manually call it every change, unlike legacy OnGUI.
         SetupCanvas();
     }
 
     // Invoked when the value of the text field changes.
-    public void ValueChangeCheck()
+    private void ValueChangeCheck()
     {
         NetworkManager.singleton.networkAddress = inputFieldAddress.text;
     }
 
-    public void ButtonHost()
+    private void ButtonHost()
     {
 		textInfo.text = "Please wait. Connecting...";
-		NetworkManager.singleton.StartHost();
+		
+		try
+		{
+			NetworkManager.singleton.StartHost();
+		}
+		catch (System.Exception e)
+		{
+			textInfo.text = "An error happened : " + e.Message;
+		}
+		
         SetupCanvas();
     }
 
-    public void ButtonServer()
+    private void ButtonServer()
     {
         textInfo.text = "Please wait. Connecting...";
-		NetworkManager.singleton.StartServer();
+        
+        try
+        {
+	        NetworkManager.singleton.StartServer();
+        }
+        catch (System.Exception e)
+        {
+	        textInfo.text = "An error happened : " + e.Message;
+        }
+        
         SetupCanvas();
     }
 
-    public void ButtonClient()
+    private void ButtonClient()
     {   
 		textInfo.text = "Please wait. Connecting...";
-		NetworkManager.singleton.StartClient();
+		
+		try
+		{
+			NetworkManager.singleton.StartClient();
+		}
+		catch (System.Exception e)
+		{
+			textInfo.text = "An error happened : " + e.Message;
+		}
+		
         SetupCanvas();
     }
 
-    public void SetupCanvas()
+    private void SetupCanvas()
     {
         // Here we will dump majority of the canvas UI that may be changed.
 		if (NetworkClient.isConnected && NetworkServer.active)
