@@ -29,8 +29,8 @@ public class PhoneController : MonoBehaviour
 
     void Start()
     {
-        hideMessage();
-        generateScreens();
+        HideMessage();
+        GenerateScreens();
 
         // Hide all screens
         foreach (GameObject screen in screens.Values)
@@ -39,19 +39,20 @@ public class PhoneController : MonoBehaviour
         }
 
         // Start on the product list screen
-        navigate(Phone.Screen.ProductList);
+        Navigate(Phone.Screen.ProductList);
     }
 
-    private void generateScreens()
+    private void GenerateScreens()
     {
         screens.Add(Phone.Screen.ProductList, productListScreen);
         screens.Add(Phone.Screen.Pause, pauseScreen);
     }
 
-    public void showMessage(string name, string message)
+    public void ShowMessage(string name, string message)
     {
         messagePanel.SetActive(true);
-
+        Debug.Log("Message received : " + name + " : " + message + " !");
+        
         // Split name & lastname
         string[] nameParts = name.Split(' ');
 
@@ -67,31 +68,38 @@ public class PhoneController : MonoBehaviour
 
         messageName.text = name;
         messageText.text = message;
-        StartCoroutine(delayedHideMessage(defaultMessageDuration));
+        
+        // Start animation
+        messagePanel.transform.localPosition = new Vector3(0, -170, 0);
+        messagePanel.transform.LeanMoveY(0, 0.5f).setEaseOutBack();
+        
+        // Hide message after a while
+        StartCoroutine(DelayedHideMessage(defaultMessageDuration));
     }
 
-    private IEnumerator delayedHideMessage(int duration)
+    private IEnumerator DelayedHideMessage(int duration)
     {
         yield return new WaitForSeconds(duration);
-        hideMessage();
+        HideMessage();
     }
 
-    public void hideMessage()
+    public void HideMessage()
     {
-        messagePanel.SetActive(false);
+        messagePanel.transform.localPosition = new Vector3(0, 0, 0);
+        messagePanel.transform.LeanMoveY(-170, 0.5f).setEaseInBack();
     }
 
-    public void setScreenTitle(string title)
+    public void SetScreenTitle(string title)
     {
         screenTitle.text = title;
     }
 
-    public void setTimeText(string time)
+    public void SetTimeText(string time)
     {
         timeText.text = time;
     }
 
-    public void navigate(Phone.Screen screen)
+    public void Navigate(Phone.Screen screen)
     {
 
         // Check if the screen exists
@@ -109,7 +117,7 @@ public class PhoneController : MonoBehaviour
         // Show the new screen
         screens[screen].SetActive(true);
         currentScreen = screens[screen];
-        setScreenTitle(Phone.ScreenTitles[screen]);
+        SetScreenTitle(Phone.ScreenTitles[screen]);
     }
 
 }

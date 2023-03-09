@@ -8,7 +8,12 @@ public class Player : NetworkBehaviour
 {
     [SyncVar]
     public string username = "Player";
-    
+
+    public uint GetNetId()
+    {
+        return netId;
+    }
+
     public void Setup()
     {
         if(isLocalPlayer)

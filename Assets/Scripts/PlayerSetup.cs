@@ -42,7 +42,10 @@ public class PlayerSetup : NetworkBehaviour
                 ui.SetPlayer(GetComponent<Player>());
             }
 
-            GetComponent<Player>().Setup();
+            var player = GetComponent<Player>();
+            GameManager.RegisterPlayer(player.GetNetId(), player);
+            GameManager.RegisterPhoneController(player.GetNetId(), ui.GetPhoneController());
+            player.Setup();
         }
     }
     
