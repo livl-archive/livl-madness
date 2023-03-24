@@ -51,23 +51,20 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //if (PlayerUI.isPaused)
-        //{
-        //    if (Cursor.lockState != CursorLockMode.None)
-        //    {
-        //        Cursor.lockState = CursorLockMode.None;
-        //    }
-//
-        //    //motor.Move(Vector3.zero); // Stop the player
-        //    //motor.Rotate(Vector3.zero);
-        //    //motor.RotateCamera(Vector3.zero); // Stop the camera to move
-        //    return;
-        //}
-//
-        //if (Cursor.lockState != CursorLockMode.Locked)
-        //{
-        //    Cursor.lockState = CursorLockMode.Locked;
-        //}
+        if (PlayerUI.isPaused)
+        {
+            if (Cursor.lockState != CursorLockMode.None)
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            
+            return;
+        }
+        
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
     
     private void FixedUpdate() {
@@ -75,103 +72,108 @@ public class PlayerController : MonoBehaviour
             Move();
             HandleJump();
             HandleCrouch();
-        }
-        private void LateUpdate() {
-            CamMovements();
-        }
+    }
+    private void LateUpdate() {
+        CamMovements();
+    }
 
-        private void Move()
+    private void Move()
+    {
+        if(PlayerUI.isPaused)
+            return;
+        
+        if(!_hasAnimator) return;
+
+        float targetSpeed = _inputManager.Run ? _runSpeed : _walkSpeed;
+        if(_inputManager.Crouch) targetSpeed = 1.5f;
+        if(_inputManager.Move ==Vector2.zero) targetSpeed = 0;
+
+        if(_grounded)
         {
-            if(!_hasAnimator) return;
-
-            float targetSpeed = _inputManager.Run ? _runSpeed : _walkSpeed;
-            if(_inputManager.Crouch) targetSpeed = 1.5f;
-            if(_inputManager.Move ==Vector2.zero) targetSpeed = 0;
-
-            if(_grounded)
-            {
-                
-            _currentVelocity.x = Mathf.Lerp(_currentVelocity.x, _inputManager.Move.x * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
-            _currentVelocity.y =  Mathf.Lerp(_currentVelocity.y, _inputManager.Move.y * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
-
-            var xVelDifference = _currentVelocity.x - _playerRigidbody.velocity.x;
-            var zVelDifference = _currentVelocity.y - _playerRigidbody.velocity.z;
-
-            _playerRigidbody.AddForce(transform.TransformVector(new Vector3(xVelDifference, 0 , zVelDifference)), ForceMode.VelocityChange);
-            }
-            else
-            {
-                _playerRigidbody.AddForce(transform.TransformVector(new Vector3(_currentVelocity.x * AirResistance,0,_currentVelocity.y * AirResistance)), ForceMode.VelocityChange);
-            }
-
-
-            _animator.SetFloat(_xVelHash , _currentVelocity.x);
-            _animator.SetFloat(_yVelHash, _currentVelocity.y);
-        }
-
-        private void CamMovements()
-        {
-            if(!_hasAnimator) return;
-
-            var Mouse_X = _inputManager.Look.x;
-            var Mouse_Y = _inputManager.Look.y;
-            Camera.position = CameraRoot.position;
             
-            
-            _xRotation -= Mouse_Y * MouseSensitivity * Time.smoothDeltaTime;
-            _xRotation = Mathf.Clamp(_xRotation, UpperLimit, BottomLimit);
+        _currentVelocity.x = Mathf.Lerp(_currentVelocity.x, _inputManager.Move.x * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
+        _currentVelocity.y =  Mathf.Lerp(_currentVelocity.y, _inputManager.Move.y * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
 
-            Camera.localRotation = Quaternion.Euler(_xRotation, 0 , 0);
-            _playerRigidbody.MoveRotation(_playerRigidbody.rotation * Quaternion.Euler(0, Mouse_X * MouseSensitivity * Time.smoothDeltaTime, 0));
+        var xVelDifference = _currentVelocity.x - _playerRigidbody.velocity.x;
+        var zVelDifference = _currentVelocity.y - _playerRigidbody.velocity.z;
+
+        _playerRigidbody.AddForce(transform.TransformVector(new Vector3(xVelDifference, 0 , zVelDifference)), ForceMode.VelocityChange);
+        }
+        else
+        {
+            _playerRigidbody.AddForce(transform.TransformVector(new Vector3(_currentVelocity.x * AirResistance,0,_currentVelocity.y * AirResistance)), ForceMode.VelocityChange);
         }
 
-        private void HandleCrouch() => _animator.SetBool(_crouchHash , _inputManager.Crouch);
+
+        _animator.SetFloat(_xVelHash , _currentVelocity.x);
+        _animator.SetFloat(_yVelHash, _currentVelocity.y);
+    }
+
+    private void CamMovements()
+    {
+        if(PlayerUI.isPaused)
+            return;
+        
+        if(!_hasAnimator) return;
+
+        var Mouse_X = _inputManager.Look.x;
+        var Mouse_Y = _inputManager.Look.y;
+        Camera.position = CameraRoot.position;
+        
+        
+        _xRotation -= Mouse_Y * MouseSensitivity * Time.smoothDeltaTime;
+        _xRotation = Mathf.Clamp(_xRotation, UpperLimit, BottomLimit);
+
+        Camera.localRotation = Quaternion.Euler(_xRotation, 0 , 0);
+        _playerRigidbody.MoveRotation(_playerRigidbody.rotation * Quaternion.Euler(0, Mouse_X * MouseSensitivity * Time.smoothDeltaTime, 0));
+    }
+
+    private void HandleCrouch() => _animator.SetBool(_crouchHash , _inputManager.Crouch);
 
 
-        private void HandleJump()
+    private void HandleJump()
+    {
+        if(!_hasAnimator) return;
+        if(!_inputManager.Jump) return;
+        if(!_grounded) return;
+        _animator.SetTrigger(_jumpHash);
+
+        //Enable this if you want B-Hop
+        //_playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
+        //_playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
+        //_animator.ResetTrigger(_jumpHash);
+    }
+
+    public void JumpAddForce()
+    {
+        //Comment this out if you want B-Hop, otherwise the player will jump twice in the air
+        _playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
+        _playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
+        _animator.ResetTrigger(_jumpHash);
+    }
+
+    private void SampleGround()
+    {
+        if(!_hasAnimator) return;
+        
+        RaycastHit hitInfo;
+        if(Physics.Raycast(_playerRigidbody.worldCenterOfMass, Vector3.down, out hitInfo, Dis2Ground + 0.1f, GroundCheck))
         {
-            if(!_hasAnimator) return;
-            if(!_inputManager.Jump) return;
-            if(!_grounded) return;
-            _animator.SetTrigger(_jumpHash);
-
-            //Enable this if you want B-Hop
-            //_playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
-            //_playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
-            //_animator.ResetTrigger(_jumpHash);
-        }
-
-        public void JumpAddForce()
-        {
-            //Comment this out if you want B-Hop, otherwise the player will jump twice in the air
-            _playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
-            _playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
-            _animator.ResetTrigger(_jumpHash);
-        }
-
-        private void SampleGround()
-        {
-            if(!_hasAnimator) return;
-            
-            RaycastHit hitInfo;
-            if(Physics.Raycast(_playerRigidbody.worldCenterOfMass, Vector3.down, out hitInfo, Dis2Ground + 0.1f, GroundCheck))
-            {
-                //Grounded
-                _grounded = true;
-                SetAnimationGrounding();
-                return;
-            }
-            //Falling
-            _grounded = false;
-            _animator.SetFloat(_zVelHash, _playerRigidbody.velocity.y);
+            //Grounded
+            _grounded = true;
             SetAnimationGrounding();
             return;
         }
+        //Falling
+        _grounded = false;
+        _animator.SetFloat(_zVelHash, _playerRigidbody.velocity.y);
+        SetAnimationGrounding();
+        return;
+    }
 
-        private void SetAnimationGrounding()
-        {
-            _animator.SetBool(_fallingHash, !_grounded);
-            _animator.SetBool(_groundHash, _grounded);
-        }
-
+    private void SetAnimationGrounding()
+    {
+        _animator.SetBool(_fallingHash, !_grounded);
+        _animator.SetBool(_groundHash, _grounded);
+    }
 }
