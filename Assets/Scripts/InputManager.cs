@@ -60,8 +60,6 @@ public class InputManager : MonoBehaviour
     private void onJump(InputAction.CallbackContext context)
     {
         Jump = context.ReadValueAsButton();
-        Debug.Log("Running: " + Jump);
-
     }
     private void onCrouch(InputAction.CallbackContext context)
     {
