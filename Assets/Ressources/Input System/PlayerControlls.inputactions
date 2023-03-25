@@ -11,7 +11,8 @@
                     "id": "58bb4aee-5489-4df2-8c4d-1055a7965c6d",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Look",
@@ -19,7 +20,8 @@
                     "id": "3a25b153-2b66-466a-8b6b-32ef75f6529d",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Run",
@@ -27,7 +29,8 @@
                     "id": "eb8f6d8e-f8dc-4fc0-a039-d90a23b4b622",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Jump",
@@ -35,7 +38,8 @@
                     "id": "99ede621-af2e-43fa-bc70-f6790e4ccaf7",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Crouch",
@@ -43,7 +47,17 @@
                     "id": "00a01b46-1bc8-4f85-a1db-a9203ffbd9cd",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Aiming",
+                    "type": "PassThrough",
+                    "id": "53203579-1bf0-48cb-9543-cc43d29121bb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -143,6 +157,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "30dec5af-33e9-43e1-a643-526444fd3c41",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aiming",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

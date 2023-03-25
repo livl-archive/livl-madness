@@ -15,6 +15,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float Dis2Ground = 0.8f;
     [SerializeField] private LayerMask GroundCheck;
     [SerializeField] private float AirResistance = 0.8f;
+    
+    [Tooltip("Acceleration and deceleration")]
+    [SerializeField] private float SpeedChangeRate = 10.0f;
+    [SerializeField] private AudioClip LandingAudioClip;
+    [SerializeField] private AudioClip[] FootstepAudioClips;
+    [SerializeField] [Range(0, 1)] private float FootstepAudioVolume = 0.5f;
+    
     private Rigidbody _playerRigidbody;
     private InputManager _inputManager;
     private Animator _animator;
@@ -25,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private int _jumpHash;
     private int _groundHash;
     private int _fallingHash;
+    private int _aimingHash;
     private int _zVelHash;
     private int _crouchHash;
     private float _xRotation;
@@ -38,8 +46,7 @@ public class PlayerController : MonoBehaviour
         _hasAnimator = TryGetComponent<Animator>(out _animator);
         _playerRigidbody = GetComponent<Rigidbody>();
         _inputManager = GetComponent<InputManager>();
-
-
+        
         _xVelHash = Animator.StringToHash("X_Velocity");
         _yVelHash = Animator.StringToHash("Y_Velocity");
         _zVelHash = Animator.StringToHash("Z_Velocity");
@@ -47,9 +54,15 @@ public class PlayerController : MonoBehaviour
         _groundHash = Animator.StringToHash("Grounded");
         _fallingHash = Animator.StringToHash("Falling");
         _crouchHash = Animator.StringToHash("Crouch");
+        _aimingHash = Animator.StringToHash("Aiming");
     }
 
     private void Update()
+    {
+        HideCursor();
+    }
+
+    private void HideCursor()
     {
         if (PlayerUI.isPaused)
         {
@@ -68,11 +81,13 @@ public class PlayerController : MonoBehaviour
     }
     
     private void FixedUpdate() {
-            SampleGround();
-            Move();
-            HandleJump();
-            HandleCrouch();
+        SampleGround();
+        Move();
+        HandleJump();
+        HandleCrouch();
+        HandleAiming();
     }
+    
     private void LateUpdate() {
         CamMovements();
     }
@@ -88,23 +103,20 @@ public class PlayerController : MonoBehaviour
         if(_inputManager.Crouch) targetSpeed = 1.5f;
         if(_inputManager.Move ==Vector2.zero) targetSpeed = 0;
 
-        if(_grounded)
-        {
-            
-        _currentVelocity.x = Mathf.Lerp(_currentVelocity.x, _inputManager.Move.x * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
-        _currentVelocity.y =  Mathf.Lerp(_currentVelocity.y, _inputManager.Move.y * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
+        if(_grounded) 
+        { 
+            _currentVelocity.x = Mathf.Lerp(_currentVelocity.x, _inputManager.Move.x * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
+            _currentVelocity.y =  Mathf.Lerp(_currentVelocity.y, _inputManager.Move.y * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
 
-        var xVelDifference = _currentVelocity.x - _playerRigidbody.velocity.x;
-        var zVelDifference = _currentVelocity.y - _playerRigidbody.velocity.z;
+            var xVelDifference = _currentVelocity.x - _playerRigidbody.velocity.x;
+            var zVelDifference = _currentVelocity.y - _playerRigidbody.velocity.z;
 
-        _playerRigidbody.AddForce(transform.TransformVector(new Vector3(xVelDifference, 0 , zVelDifference)), ForceMode.VelocityChange);
-        }
-        else
+            _playerRigidbody.AddForce(transform.TransformVector(new Vector3(xVelDifference, 0 , zVelDifference)), ForceMode.VelocityChange);
+        } else
         {
             _playerRigidbody.AddForce(transform.TransformVector(new Vector3(_currentVelocity.x * AirResistance,0,_currentVelocity.y * AirResistance)), ForceMode.VelocityChange);
         }
-
-
+        
         _animator.SetFloat(_xVelHash , _currentVelocity.x);
         _animator.SetFloat(_yVelHash, _currentVelocity.y);
     }
@@ -170,10 +182,45 @@ public class PlayerController : MonoBehaviour
         SetAnimationGrounding();
         return;
     }
+    
+    private void HandleAiming()
+    {
+        bool isAiming = _inputManager.Aiming;
+
+        if (isAiming)
+        {
+            _animator.SetBool(_aimingHash, true);
+        }
+        else
+        {
+            _animator.SetBool(_aimingHash, false);
+        }
+    }
 
     private void SetAnimationGrounding()
     {
         _animator.SetBool(_fallingHash, !_grounded);
         _animator.SetBool(_groundHash, _grounded);
+    }
+    
+    private void OnFootstep(AnimationEvent animationEvent)
+    {
+        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            if (FootstepAudioClips.Length > 0)
+            {
+                var index = Random.Range(0, FootstepAudioClips.Length);
+        
+                AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_playerRigidbody.transform.position), FootstepAudioVolume);
+            }
+        }
+    }
+
+    private void OnLand(AnimationEvent animationEvent)
+    {
+        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_playerRigidbody.transform.position), FootstepAudioVolume);
+        }
     }
 }
