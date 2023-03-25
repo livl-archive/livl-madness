@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
     public bool Run {get; private set;}
     public bool Jump {get; private set;}
     public bool Crouch {get; private set;}
+    public bool Aiming {get; private set;}
 
     private InputActionMap _currentMap;
     private InputAction _moveAction;
@@ -18,20 +19,22 @@ public class InputManager : MonoBehaviour
     private InputAction _runAction;
     private InputAction _jumpAction;
     private InputAction _crouchAction;
+    private InputAction _aimingAction;
 
     private void Awake() {
-        HideCursor();
         _currentMap = PlayerInput.currentActionMap;
         _moveAction = _currentMap.FindAction("Move");
         _lookAction = _currentMap.FindAction("Look");
         _runAction  = _currentMap.FindAction("Run");
         _jumpAction = _currentMap.FindAction("Jump");
         _crouchAction = _currentMap.FindAction("Crouch");
+        _aimingAction = _currentMap.FindAction("Aiming");
 
         _moveAction.performed += onMove;
         _lookAction.performed += onLook;
         _runAction.performed += onRun;
         _jumpAction.performed += onJump;
+        _aimingAction.performed += onAiming;
         _crouchAction.started += onCrouch;
 
         _moveAction.canceled += onMove;
@@ -39,12 +42,7 @@ public class InputManager : MonoBehaviour
         _runAction.canceled += onRun;
         _jumpAction.canceled += onJump;
         _crouchAction.canceled += onCrouch;
-    }
-
-    private void HideCursor()
-    {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        _aimingAction.canceled += onAiming;
     }
 
     private void onMove(InputAction.CallbackContext context)
@@ -62,10 +60,16 @@ public class InputManager : MonoBehaviour
     private void onJump(InputAction.CallbackContext context)
     {
         Jump = context.ReadValueAsButton();
+        Debug.Log("Running: " + Jump);
+
     }
     private void onCrouch(InputAction.CallbackContext context)
     {
         Crouch = context.ReadValueAsButton();
+    }
+    private void onAiming(InputAction.CallbackContext context)
+    {
+        Aiming = context.ReadValueAsButton();
     }
 
     private void OnEnable() {
