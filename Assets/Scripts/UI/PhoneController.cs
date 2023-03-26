@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class PhoneController : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class PhoneController : MonoBehaviour
     [SerializeField] private TMP_Text screenTitle;
 
     [Header("Message Components")]
-    [SerializeField] private GameObject messagePanel;
+    [SerializeField] private Transform messagePanel;
     [SerializeField] private TMP_Text messageInitials;
     [SerializeField] private TMP_Text messageName;
     [SerializeField] private TMP_Text messageText;
@@ -22,14 +23,17 @@ public class PhoneController : MonoBehaviour
 
 
     [Header("Config")]
-    [SerializeField] private int defaultMessageDuration = 5;
+    [SerializeField] private int messageDuration = 5;
+    [SerializeField] private int messageHiddenYPos = -1200;
+    [SerializeField] private int messageShownYPos = 0;
+    [SerializeField] private float messageTransitionTime = 1.0f;
 
     private GameObject currentScreen;
     private Dictionary<Phone.Screen, GameObject> screens = new Dictionary<Phone.Screen, GameObject>();
 
     void Start()
     {
-        HideMessage();
+        messagePanel.localPosition = new Vector2(0, messageHiddenYPos);
         GenerateScreens();
 
         // Hide all screens
@@ -50,7 +54,6 @@ public class PhoneController : MonoBehaviour
 
     public void ShowMessage(string name, string message)
     {
-        messagePanel.SetActive(true);
         Debug.Log("Message received : " + name + " : " + message + " !");
         
         // Split name & lastname
@@ -70,11 +73,11 @@ public class PhoneController : MonoBehaviour
         messageText.text = message;
         
         // Start animation
-        messagePanel.transform.localPosition = new Vector3(0, -170, 0);
-        messagePanel.transform.LeanMoveY(0, 0.5f).setEaseOutBack();
+        messagePanel.localPosition = new Vector2(0, messageHiddenYPos);
+        messagePanel.LeanMoveLocalY(messageShownYPos, messageTransitionTime).setEaseOutBack();
         
         // Hide message after a while
-        StartCoroutine(DelayedHideMessage(defaultMessageDuration));
+        StartCoroutine(DelayedHideMessage(messageDuration));
     }
 
     private IEnumerator DelayedHideMessage(int duration)
@@ -85,8 +88,8 @@ public class PhoneController : MonoBehaviour
 
     public void HideMessage()
     {
-        messagePanel.transform.localPosition = new Vector3(0, 0, 0);
-        messagePanel.transform.LeanMoveY(-170, 0.5f).setEaseInBack();
+        messagePanel.localPosition = new Vector2(0, messageShownYPos);
+        messagePanel.LeanMoveLocalY(messageHiddenYPos, messageTransitionTime).setEaseInBack();
     }
 
     public void SetScreenTitle(string title)

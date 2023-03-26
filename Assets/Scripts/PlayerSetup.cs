@@ -5,7 +5,6 @@ using Mirror;
 
 public class PlayerSetup : NetworkBehaviour
 {
-    
     [SerializeField]
     Behaviour[] componentsToDisable;
     
