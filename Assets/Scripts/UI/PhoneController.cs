@@ -12,7 +12,7 @@ public class PhoneController : MonoBehaviour
     [SerializeField] private TMP_Text screenTitle;
 
     [Header("Message Components")]
-    [SerializeField] private Transform messagePanel;
+    [SerializeField] private GameObject messagePanel;
     [SerializeField] private TMP_Text messageInitials;
     [SerializeField] private TMP_Text messageName;
     [SerializeField] private TMP_Text messageText;
@@ -24,16 +24,16 @@ public class PhoneController : MonoBehaviour
 
     [Header("Config")]
     [SerializeField] private int messageDuration = 5;
-    [SerializeField] private int messageHiddenYPos = -1200;
-    [SerializeField] private int messageShownYPos = 0;
+    [SerializeField] private int messageHiddenMultiplier = 0;
+    [SerializeField] private int messageShownMultiplier = 0;
     [SerializeField] private float messageTransitionTime = 1.0f;
 
     private GameObject currentScreen;
     private Dictionary<Phone.Screen, GameObject> screens = new Dictionary<Phone.Screen, GameObject>();
 
     void Start()
-    {
-        messagePanel.localPosition = new Vector2(0, messageHiddenYPos);
+    {   
+        HideMessage(false);
         GenerateScreens();
 
         // Hide all screens
@@ -73,8 +73,7 @@ public class PhoneController : MonoBehaviour
         messageText.text = message;
         
         // Start animation
-        messagePanel.localPosition = new Vector2(0, messageHiddenYPos);
-        messagePanel.LeanMoveLocalY(messageShownYPos, messageTransitionTime).setEaseOutBack();
+        messagePanel.transform.LeanMoveLocal(messagePanel.transform.up * messageShownMultiplier, messageTransitionTime).setEaseOutQuint();
         
         // Hide message after a while
         StartCoroutine(DelayedHideMessage(messageDuration));
@@ -86,10 +85,15 @@ public class PhoneController : MonoBehaviour
         HideMessage();
     }
 
-    public void HideMessage()
+    public void HideMessage(bool animated = true)
     {
-        messagePanel.localPosition = new Vector2(0, messageShownYPos);
-        messagePanel.LeanMoveLocalY(messageHiddenYPos, messageTransitionTime).setEaseInBack();
+        if (!animated)
+        {
+            messagePanel.transform.localPosition = messagePanel.transform.up * messageHiddenMultiplier;
+            return;
+        }
+        
+        messagePanel.transform.LeanMoveLocal(messagePanel.transform.up * messageHiddenMultiplier, messageTransitionTime).setEaseInQuint();
     }
 
     public void SetScreenTitle(string title)
