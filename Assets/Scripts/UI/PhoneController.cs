@@ -27,6 +27,7 @@ public class PhoneController : MonoBehaviour
     [SerializeField] private int messageHiddenMultiplier = 0;
     [SerializeField] private int messageShownMultiplier = 0;
     [SerializeField] private float messageTransitionTime = 1.0f;
+    [SerializeField] private float screenTransitionTime = 1.0f;
 
     private GameObject currentScreen;
     private Dictionary<Phone.Screen, GameObject> screens = new Dictionary<Phone.Screen, GameObject>();
@@ -39,7 +40,7 @@ public class PhoneController : MonoBehaviour
         // Hide all screens
         foreach (GameObject screen in screens.Values)
         {
-            screen.SetActive(false);
+            HideScreen(screen, false);
         }
 
         // Start on the product list screen
@@ -118,13 +119,38 @@ public class PhoneController : MonoBehaviour
         // Hide the previous screen
         if (currentScreen != null)
         {
-            currentScreen.SetActive(false);
+            HideScreen(currentScreen);
         }
 
         // Show the new screen
-        screens[screen].SetActive(true);
         currentScreen = screens[screen];
+        ShowScreen(currentScreen);
         SetScreenTitle(Phone.ScreenTitles[screen]);
+    }
+
+    private void HideScreen(GameObject screen, bool animated = true)
+    {
+        screen.transform.localScale = new Vector3(0, 0, 0);
+
+        if (!animated)
+        {
+            screen.SetActive(false);
+            return;
+        } 
+        
+        StartCoroutine(DelayedSetActive(screen, false, screenTransitionTime));
+    }
+    
+    private void ShowScreen(GameObject screen)
+    {
+        screen.SetActive(true);
+        screen.LeanScale(new Vector3(1, 1, 1), screenTransitionTime).setEaseOutQuint();
+    }
+    
+    private IEnumerator DelayedSetActive(GameObject obj, bool active, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(active);
     }
 
 }
