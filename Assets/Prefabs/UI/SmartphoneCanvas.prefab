@@ -962,7 +962,7 @@ MonoBehaviour:
   messageHiddenMultiplier: 80
   messageShownMultiplier: 0
   messageTransitionTime: 1
-  screenTransitionTime: 0.5
+  screenTransitionTime: 0.25
 --- !u!1 &4061064151730123852
 GameObject:
   m_ObjectHideFlags: 0

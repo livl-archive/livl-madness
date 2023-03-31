@@ -32,6 +32,8 @@ public class PhoneController : MonoBehaviour
     private GameObject currentScreen;
     private Dictionary<Phone.Screen, GameObject> screens = new Dictionary<Phone.Screen, GameObject>();
 
+    private float lastCoroutineTime;
+
     void Start()
     {   
         HideMessage(false);
@@ -53,6 +55,7 @@ public class PhoneController : MonoBehaviour
         screens.Add(Phone.Screen.Pause, pauseScreen);
     }
 
+    // TODO : Move message to a separate script
     public void ShowMessage(string name, string message)
     {
         Debug.Log("Message received : " + name + " : " + message + " !");
@@ -115,11 +118,18 @@ public class PhoneController : MonoBehaviour
         {
             throw new System.Exception("Screen " + screen.ToString() + " does not exist");
         }
+        
+        var animationFinished = Time.time - lastCoroutineTime > screenTransitionTime;
+        // Cancel current hide coroutine if any
+        if (!animationFinished)
+        {
+            StopAllCoroutines();
+        }
 
         // Hide the previous screen
         if (currentScreen != null)
         {
-            HideScreen(currentScreen);
+            HideScreen(currentScreen, animationFinished);
         }
 
         // Show the new screen
@@ -136,9 +146,11 @@ public class PhoneController : MonoBehaviour
         {
             screen.SetActive(false);
             return;
-        } 
-        
-        StartCoroutine(DelayedSetActive(screen, false, screenTransitionTime));
+        }
+
+        lastCoroutineTime = Time.time;
+        var coroutine = DelayedSetActive(screen, false, screenTransitionTime);
+        StartCoroutine(coroutine);
     }
     
     private void ShowScreen(GameObject screen)
