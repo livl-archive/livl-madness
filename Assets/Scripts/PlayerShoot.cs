@@ -4,12 +4,15 @@ using Mirror;
 public class PlayerShoot : NetworkBehaviour
 {
 
+    [Tooltip("The weapon used by the player")]
     public PlayerWeapon weapon;
 
     [SerializeField]
-    private Camera cam;
+    [Tooltip("The camera used to shoot")]
+    private GameObject cam;
 
     [SerializeField]
+    [Tooltip("The layer on which the raycast will be casted")]
     private LayerMask mask;
 
     void Start()
@@ -26,7 +29,7 @@ public class PlayerShoot : NetworkBehaviour
         if (PlayerUI.isPaused)
             return;
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1")) // if we click on the left mouse button
         {
             Shoot();
         }
