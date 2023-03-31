@@ -5,23 +5,12 @@ using UnityEngine;
 public class ShelfController : MonoBehaviour
 {
     public List<GameObject> spawnPoints;
-    private List<int> usedSpawnPointsIdx;
+    private List<int> usedSpawnPointsIdx = new List<int>();
 
-    // Start is called before the first frame update
-    void Start()
+    public void setItem(GameObject item)
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void setItem(GameObject gameObject) {
-
-        if(usedSpawnPointsIdx.Count == spawnPointsIdx.Count)
+        if (this.usedSpawnPointsIdx.Count == this.spawnPoints.Count)
         {
             return;
         }
@@ -30,8 +19,18 @@ public class ShelfController : MonoBehaviour
         do
         {
             rndItemIdx = Random.Range(0, spawnPoints.Count);
-        } while(usedSpawnPointsIdx.Contains(rndItemIdx));
+        } while (usedSpawnPointsIdx.Contains(rndItemIdx));
+
+        GameObject spawnPoint = spawnPoints[rndItemIdx];
+        Vector3 randomSpawnPosition = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, spawnPoint.transform.position.z);
 
 
+        Instantiate(item, randomSpawnPosition, Quaternion.identity);
+
+    }
+
+    public bool isEmptySpaceAvailable()
+    {
+        return this.usedSpawnPointsIdx.Count < this.spawnPoints.Count;
     }
 }

@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: 875e659c05fdb42cd80f10d3e5871386
+  - enabled: 1
+    path: Assets/Scenes/LobbyTestRaffael.unity
+    guid: 0d141a98807f98b48aaa07470c7291b2
+  - enabled: 1
+    path: Assets/Scenes/MainScene-Raffael-test.unity
+    guid: 1668708fbf11a57449aac43bdd01ee4a
   m_configObjects: {}

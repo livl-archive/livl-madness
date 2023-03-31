@@ -756,7 +756,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7623831903565442379}
-  - component: {fileID: 7946588091898366627}
+  - component: {fileID: 2661586190915962149}
+  - component: {fileID: 506782861886838945}
   m_Layer: 0
   m_Name: shelf_with_items
   m_TagString: Untagged
@@ -793,7 +794,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7946588091898366627
+--- !u!114 &2661586190915962149
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -802,41 +803,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7099531280500307953}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 189060495e6fcc24aadb7f7606b48a7d, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d88d8a0985aed0409fbfc2a3f27afbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 100000, guid: 094627802cc8b7849aed1eb1a64bbe75, type: 3}
-  - {fileID: 100000, guid: a77e30de2eb4e0249ae881ea7e042b0a, type: 3}
-  - {fileID: 100000, guid: 00884340fd19a5a4981a9ffb200bd30f, type: 3}
-  - {fileID: 100000, guid: cff4d1e8f953dfd45a56800a42d5b0c8, type: 3}
-  - {fileID: 100000, guid: 96099f261a388b844bdd80c870a8c001, type: 3}
-  - {fileID: 100000, guid: 8f3f2404a883f5949a22eb1182951c9e, type: 3}
-  - {fileID: 100000, guid: ccdbd1848af3ed74c8a2d04c5911c8f9, type: 3}
-  - {fileID: 100000, guid: 70e1fcdcfea29ed48bc3e9dc739bb684, type: 3}
-  - {fileID: 100000, guid: 5a0bcbce645cce646a295ed945594045, type: 3}
-  - {fileID: 100000, guid: 3eb9ce3954e81a547a9bad89618388fc, type: 3}
-  - {fileID: 100000, guid: d25f704bfb4c8014393d28319f51d9e9, type: 3}
-  - {fileID: 100000, guid: 4bbf94c4dfa64ba4395b5fcbfbd4ef9b, type: 3}
-  - {fileID: 100000, guid: a398b899693626449947670be6f562b9, type: 3}
-  - {fileID: 100000, guid: 67967c3a2d033f24f972f53675021339, type: 3}
-  - {fileID: 100000, guid: 82cdba7f4571dae4c93dffd0d73eb13d, type: 3}
-  - {fileID: 100000, guid: 9e7adcb4180bd9f43a80542600df73c2, type: 3}
-  - {fileID: 100000, guid: d0b25a0bca68d0e48ac789e6738ae3cf, type: 3}
-  - {fileID: 100000, guid: c953fdbf8d5a16a409e7f9d89841f1ee, type: 3}
-  - {fileID: 100000, guid: faa380f339b11c14f84958f35cf52da8, type: 3}
-  - {fileID: 100000, guid: b58ef59204614454d827c2cc31d4ac14, type: 3}
-  - {fileID: 100000, guid: e59c418d989aca7499feb8d40c6977b1, type: 3}
-  - {fileID: 100000, guid: d42110035b1f0764dac7ebef8e7a178c, type: 3}
-  - {fileID: 100000, guid: 3785f4afe9dacc34e97d97c54833fd90, type: 3}
-  - {fileID: 100000, guid: c8dab747a3f16c14f8485c8a54a17072, type: 3}
-  - {fileID: 100000, guid: 2516e43dbcca1f5449dc2d4199b7cc63, type: 3}
-  - {fileID: 100006, guid: d368c1f0262b93f4f8f218d862a5f10a, type: 3}
-  - {fileID: 100000, guid: 95837a867f13d5340927fadbe3ecffb8, type: 3}
-  - {fileID: 100000, guid: 406cc5b04bc453147819324b69fdd323, type: 3}
-  - {fileID: 100000, guid: 30bb67eec4a39a8469953d5fa442a542, type: 3}
-  - {fileID: 100000, guid: 34c3d6707c3fb9b4791a29f729177a4d, type: 3}
-  - {fileID: 100000, guid: 3c8726c7ba21fc64fbc2a8a1dd83be57, type: 3}
   spawnPoints:
   - {fileID: 7946588091213215773}
   - {fileID: 7946588091388269132}
@@ -874,6 +843,19 @@ MonoBehaviour:
   - {fileID: 7946588091583507265}
   - {fileID: 7946588091433853322}
   - {fileID: 7946588092451604105}
+--- !u!65 &506782861886838945
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7099531280500307953}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.966804, y: 0.5249344, z: 0.4558792}
+  m_Center: {x: -0.7485242, y: 0.23753256, z: -0.023993492}
 --- !u!1 &7335115058297551044
 GameObject:
   m_ObjectHideFlags: 0
