@@ -619,9 +619,17 @@ PrefabInstance:
       propertyPath: m_IgnoreReversedGraphics
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7450623235125515094, guid: 1d99f026c8ded4d79a30a9bc81525a35, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7532118100396978300, guid: 1d99f026c8ded4d79a30a9bc81525a35, type: 3}
       propertyPath: m_OverrideSorting
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7532118100396978300, guid: 1d99f026c8ded4d79a30a9bc81525a35, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7759299137406942531, guid: 1d99f026c8ded4d79a30a9bc81525a35, type: 3}
       propertyPath: m_Enabled
