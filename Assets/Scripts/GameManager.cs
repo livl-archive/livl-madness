@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         phoneControllers.Add(MakePlayerId(netID), controller);
         
         // TODO : remove test
-        controller.ShowMessage("Jean Marc Muller", "Salut, ça va ?");
+        controller.messageController.ShowMessage("Jean Marc Muller", "Salut, ça va ?");
     }
 
     public static void UnregisterPlayer(string playerId)
