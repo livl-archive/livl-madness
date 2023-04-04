@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip LandingAudioClip;
     [SerializeField] private AudioClip[] FootstepAudioClips;
     [SerializeField] [Range(0, 1)] private float FootstepAudioVolume = 0.5f;
+    
+    [Header("Animation Rigging")]
+    [SerializeField] private Rig AimRig;
+    [SerializeField] private float AimRigWeight;
     
     private Rigidbody _playerRigidbody;
     private InputManager _inputManager;
@@ -86,6 +91,23 @@ public class PlayerController : MonoBehaviour
         HandleJump();
         HandleCrouch();
         HandleAiming();
+        ManageAimingRig();
+    }
+    
+    [SerializeField] private Transform AimPosition;
+    [SerializeField] private float AimSmoothSpeed = 20;
+    [SerializeField] LayerMask AimLayerMask;
+    [SerializeField] private Camera PlayerCamera;
+
+    private void ManageAimingRig()
+    {
+        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = PlayerCamera.ScreenPointToRay(screenCenter);
+        
+        if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, AimLayerMask))
+        {
+            AimPosition.position = Vector3.Lerp(AimPosition.position, hit.point, AimSmoothSpeed * Time.deltaTime);        
+        }
     }
     
     private void LateUpdate() {
@@ -190,11 +212,15 @@ public class PlayerController : MonoBehaviour
         if (isAiming)
         {
             _animator.SetBool(_aimingHash, true);
+            AimRigWeight = 1f;
         }
         else
         {
             _animator.SetBool(_aimingHash, false);
+            AimRigWeight = 0f;
         }
+        
+        AimRig.weight = Mathf.Lerp(AimRig.weight, AimRigWeight, 20f * Time.deltaTime);
     }
 
     private void SetAnimationGrounding()
