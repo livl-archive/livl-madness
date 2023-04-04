@@ -98,8 +98,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float AimSmoothSpeed = 20;
     [SerializeField] LayerMask AimLayerMask;
     [SerializeField] private Camera PlayerCamera;
-    [SerializeField] private float MinAimDistance = 0.05f;
-
 
     private void ManageAimingRig()
     {
@@ -215,11 +213,15 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool(_aimingHash, true);
             AimRigWeight = 1f;
+            AimRig.transform.Find("RightForeArmAim").GetComponent<MultiAimConstraint>().weight = 1f;
+            AimRig.transform.Find("RightHandAim").GetComponent<MultiAimConstraint>().weight = 1f;
         }
         else
         {
             _animator.SetBool(_aimingHash, false);
             AimRigWeight = 0f;
+            AimRig.transform.Find("RightForeArmAim").GetComponent<MultiAimConstraint>().weight = 0f;
+            AimRig.transform.Find("RightHandAim").GetComponent<MultiAimConstraint>().weight = 0f;
         }
         
         AimRig.weight = Mathf.Lerp(AimRig.weight, AimRigWeight, 20f * Time.deltaTime);
