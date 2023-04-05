@@ -1,0 +1,52 @@
+name: Build Unity project
+
+on:
+  push:
+    branches:
+      - main
+      - ci/55-create-a-action-to-build
+
+env:
+  UNITY_VERSION: 2021.3.14f1
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Cache Unity Library
+      uses: actions/cache@v2
+      with:
+        path: Library
+        key: Library-${{ env.UNITY_VERSION }}-${{ hashFiles('**/Packages/packages-lock.json') }}
+
+    - name: Setup Unity
+      uses: game-ci/unity-setup@v2
+      with:
+        unityVersion: ${{ env.UNITY_VERSION }}
+
+    - name: Build project
+      run: |
+        $projectPath = "$(pwd)"
+        $buildPath = "$projectPath/build/windows"
+        $logFile = "$projectPath/build/windows/unity.log"
+        $unity = "C:\Program Files\Unity\Hub\Editor\$env:UNITY_VERSION\Editor\Unity.exe"
+
+        New-Item -ItemType Directory -Force -Path $buildPath | Out-Null
+
+        & $unity `
+          -batchmode `
+          -nographics `
+          -silent-crashes `
+          -quit `
+          -buildWindows64Player "$buildPath/game.exe" `
+          -projectPath $projectPath `
+          -logFile $logFile
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows-build
+        path: build/windows/
