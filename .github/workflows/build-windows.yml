@@ -23,7 +23,7 @@ jobs:
         key: Library-${{ env.UNITY_VERSION }}-${{ hashFiles('**/Packages/packages-lock.json') }}
 
     - name: Setup Unity
-      uses: game-ci/unity-setup@v2
+      uses: game-ci/unity-builder@v2.0.0
       with:
         unityVersion: ${{ env.UNITY_VERSION }}
 
