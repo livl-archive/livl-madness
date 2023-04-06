@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     public static void UnregisterPlayer(string playerId)
     {
         players.Remove(playerId);
+        phoneControllers.Remove(playerId);
     }
 
     public static Player GetPlayer(string playerId)
