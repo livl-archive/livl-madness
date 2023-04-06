@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -17,12 +16,19 @@ public class MessageController : MonoBehaviour
     [SerializeField] private int messageShownMultiplier = 0;
     [SerializeField] private float messageTransitionTime = 1.0f;
     
+    private PlayerUI playerUi;
+    
+    public void AddPlayerUI(PlayerUI _playerUi)
+    {
+        playerUi = _playerUi;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         HideMessage(false);
     }
-
+    
     public void ShowMessage(string name, string message)
     {
         Debug.Log("Message received : " + name + " : " + message + " !");
@@ -48,6 +54,12 @@ public class MessageController : MonoBehaviour
         
         // Hide message after a while
         StartCoroutine(DelayedHideMessage(messageDuration));
+
+        // Play the message notification sound
+        if(playerUi.IsActualPlayer())
+        {
+            playerUi.PlayNotificationSound();
+        } 
     }
 
     private IEnumerator DelayedHideMessage(int duration)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,11 @@ public class PlayerUI : NetworkBehaviour
     public static bool isPaused
     {
         get => paused;
+    }
+
+    private void Awake()
+    {
+        phoneController.AddPlayerUI(this);
     }
 
     private void Start()
@@ -79,5 +85,14 @@ public class PlayerUI : NetworkBehaviour
     {
         return phoneController;
     }
+    
+    public bool IsActualPlayer()
+    {
+        return controller.isLocalPlayer;
+    }
 
+    public void PlayNotificationSound()
+    {
+        controller.PlayIOSMessageSound();
+    }
 }
