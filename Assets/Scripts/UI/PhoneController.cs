@@ -20,8 +20,13 @@ public class PhoneController : MonoBehaviour
 
     private GameObject currentScreen;
     private Dictionary<Phone.Screen, GameObject> screens = new Dictionary<Phone.Screen, GameObject>();
-
+    
     private float lastCoroutineTime;
+    
+    public void AddPlayerUI(PlayerUI _playerUi)
+    {
+        messageController.AddPlayerUI(_playerUi);
+    }
 
     void Start()
     {   
