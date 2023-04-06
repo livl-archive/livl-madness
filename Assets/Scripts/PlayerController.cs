@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
-
+    [Header("Movement Settings")]
     [SerializeField] private float AnimBlendSpeed = 8.9f;
     [SerializeField] private Transform CameraRoot;
     [SerializeField] private Transform Camera;
@@ -17,15 +16,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask GroundCheck;
     [SerializeField] private float AirResistance = 0.8f;
     
-    [Tooltip("Acceleration and deceleration")]
-    [SerializeField] private float SpeedChangeRate = 10.0f;
+    //[Tooltip("Acceleration and deceleration")]
+    //[SerializeField] private float SpeedChangeRate = 10.0f;
+    
+    [Header("Audio Clips")]
     [SerializeField] private AudioClip LandingAudioClip;
-    [SerializeField] private AudioClip[] FootstepAudioClips;
-    [SerializeField] [Range(0, 1)] private float FootstepAudioVolume = 0.5f;
+    [SerializeField] public AudioClip[] FootstepAudioClips;
+    [SerializeField] private AudioClip IOSNotificationMessageClip;
     
     [Header("Animation Rigging")]
     [SerializeField] private Rig AimRig;
     [SerializeField] private float AimRigWeight;
+    
+    [Header("Aiming Settings")]
+    [SerializeField] private Transform AimPosition;
+    [SerializeField] private float AimSmoothSpeed = 20;
+    [SerializeField] LayerMask AimLayerMask;
+    [SerializeField] private Camera PlayerCamera;
     
     private Rigidbody _playerRigidbody;
     private InputManager _inputManager;
@@ -45,6 +52,8 @@ public class PlayerController : MonoBehaviour
     private const float _walkSpeed = 2f;
     private const float _runSpeed = 6f;
     private Vector2 _currentVelocity;
+    
+    private Player _player;
 
     private void Start()
     {
@@ -60,6 +69,8 @@ public class PlayerController : MonoBehaviour
         _fallingHash = Animator.StringToHash("Falling");
         _crouchHash = Animator.StringToHash("Crouch");
         _aimingHash = Animator.StringToHash("Aiming");
+        
+        _player = GetComponent<Player>();
     }
 
     private void Update()
@@ -73,11 +84,15 @@ public class PlayerController : MonoBehaviour
         {
             if (Cursor.lockState != CursorLockMode.None)
             {
-                Cursor.lockState = CursorLockMode.None;
+                Cursor.lockState = CursorLockMode.None; // Unlock the cursor to be able to click on the UI
             }
             
+            // Reset the animator values to put the player to idle state (not moving)
+            _animator.SetFloat(_xVelHash , 0);
+            _animator.SetFloat(_yVelHash, 0);
+
             return;
-        }
+        } 
         
         if (Cursor.lockState != CursorLockMode.Locked)
         {
@@ -93,11 +108,6 @@ public class PlayerController : MonoBehaviour
         HandleAiming();
         ManageAimingRig();
     }
-    
-    [SerializeField] private Transform AimPosition;
-    [SerializeField] private float AimSmoothSpeed = 20;
-    [SerializeField] LayerMask AimLayerMask;
-    [SerializeField] private Camera PlayerCamera;
 
     private void ManageAimingRig()
     {
@@ -229,24 +239,30 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool(_groundHash, _grounded);
     }
     
+    // Method called from the Animation Events files of the player
     private void OnFootstep(AnimationEvent animationEvent)
     {
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
-        {
-            if (FootstepAudioClips.Length > 0)
-            {
-                var index = Random.Range(0, FootstepAudioClips.Length);
+        if(PlayerUI.isPaused)
+            return;
         
-                AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_playerRigidbody.transform.position), FootstepAudioVolume);
-            }
+        if (FootstepAudioClips.Length > 0)
+        {
+            _player.FootStepAudioSound();
         }
     }
 
+    public void PlayIOSMessageSound()
+    {
+        if (isLocalPlayer)
+        {
+            AudioSource.PlayClipAtPoint(IOSNotificationMessageClip, transform.TransformPoint(_playerRigidbody.transform.position), 1f);
+        }
+    }
+
+    // Method called from the Animation Events files of the player
     private void OnLand(AnimationEvent animationEvent)
     {
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
-        {
-            AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_playerRigidbody.transform.position), FootstepAudioVolume);
-        }
+        if(isLocalPlayer)
+            AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_playerRigidbody.transform.position), 1f);
     }
 }
