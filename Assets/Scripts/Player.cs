@@ -33,6 +33,8 @@ public class Player : NetworkBehaviour
     
     public void FootStepAudioSound()
     {
+        audioSource.volume = 0.1f;
+        
         if (!isLocalPlayer)
         {
             // Get the distance between this player and the local player
@@ -43,18 +45,18 @@ public class Player : NetworkBehaviour
             {
                 // Calculate the volume based on the distance
                 float volume = Mathf.InverseLerp(GetComponent<AudioSource>().minDistance, GetComponent<AudioSource>().maxDistance, distance);
-
+                
+                // Set the volume of the audio source
+                audioSource.volume = volume;
+                
                 // Smooth the volume curve using an animation curve
-                AnimationCurve curve = new AnimationCurve(new Keyframe(0, volume), new Keyframe(1, 0));
-                audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, curve);
-
-                audioSource.volume = 0.1f;
+                //AnimationCurve curve = new AnimationCurve(new Keyframe(0, volume), new Keyframe(1, 0));
+                //audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, curve);
             } else
                 return;
         } 
         
         audioSource.clip = GetComponent<PlayerController>().FootstepAudioClips[Random.Range(0, GetComponent<PlayerController>().FootstepAudioClips.Length)];
         audioSource.Play();
-        
     }
 }
