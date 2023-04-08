@@ -15,13 +15,15 @@ public class ShelfController : MonoBehaviour
             return;
         }
 
-        int rndItemIdx;
+        int rndSpawnIdx;
         do
         {
-            rndItemIdx = Random.Range(0, spawnPoints.Count);
-        } while (usedSpawnPointsIdx.Contains(rndItemIdx));
+            rndSpawnIdx = Random.Range(0, spawnPoints.Count);
+        } while (usedSpawnPointsIdx.Contains(rndSpawnIdx));
 
-        GameObject spawnPoint = spawnPoints[rndItemIdx];
+        usedSpawnPointsIdx.Add(rndSpawnIdx);
+
+        GameObject spawnPoint = spawnPoints[rndSpawnIdx];
         Vector3 randomSpawnPosition = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, spawnPoint.transform.position.z);
 
 
