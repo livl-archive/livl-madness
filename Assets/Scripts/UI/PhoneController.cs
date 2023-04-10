@@ -9,89 +9,59 @@ public class PhoneController : MonoBehaviour
     [Header("Phone Components")]
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private TMP_Text screenTitle;
-
-    [Header("Message Components")]
-    [SerializeField] private GameObject messagePanel;
-    [SerializeField] private TMP_Text messageInitials;
-    [SerializeField] private TMP_Text messageName;
-    [SerializeField] private TMP_Text messageText;
+    [SerializeField] public MessageController messageController;
 
     [Header("Screens")]
     [SerializeField] private GameObject productListScreen;
     [SerializeField] private GameObject pauseScreen;
-
-
+    
     [Header("Config")]
-    [SerializeField] private int defaultMessageDuration = 5;
+    [SerializeField] private float screenTransitionTime = 1.0f;
 
     private GameObject currentScreen;
     private Dictionary<Phone.Screen, GameObject> screens = new Dictionary<Phone.Screen, GameObject>();
+    
+    private float lastCoroutineTime;
+    
+    public void AddPlayerUI(PlayerUI _playerUi)
+    {
+        messageController.AddPlayerUI(_playerUi);
+    }
 
     void Start()
-    {
-        hideMessage();
-        generateScreens();
+    {   
+        GenerateScreens();
 
         // Hide all screens
         foreach (GameObject screen in screens.Values)
         {
-            screen.SetActive(false);
+            HideScreen(screen, false);
         }
 
         // Start on the product list screen
-        navigate(Phone.Screen.ProductList);
+        Navigate(Phone.Screen.ProductList);
     }
 
-    private void generateScreens()
+    private void GenerateScreens()
     {
         screens.Add(Phone.Screen.ProductList, productListScreen);
         screens.Add(Phone.Screen.Pause, pauseScreen);
     }
 
-    public void showMessage(string name, string message)
-    {
-        messagePanel.SetActive(true);
+    // TODO : Move message to a separate script
+    
 
-        // Split name & lastname
-        string[] nameParts = name.Split(' ');
-
-        // Make initials from first letter of each part
-        if (nameParts.Length > 1)
-        {
-            messageInitials.text = nameParts[0][0].ToString() + nameParts[1][0].ToString();
-        }
-        else
-        {
-            messageInitials.text = name.Substring(0, 2);
-        }
-
-        messageName.text = name;
-        messageText.text = message;
-        StartCoroutine(delayedHideMessage(defaultMessageDuration));
-    }
-
-    private IEnumerator delayedHideMessage(int duration)
-    {
-        yield return new WaitForSeconds(duration);
-        hideMessage();
-    }
-
-    public void hideMessage()
-    {
-        messagePanel.SetActive(false);
-    }
-
-    public void setScreenTitle(string title)
+    public void SetScreenTitle(string title)
     {
         screenTitle.text = title;
     }
 
-    public void setTimeText(string time)
+    public void SetTimeText(string time)
     {
         timeText.text = time;
     }
 
-    public void navigate(Phone.Screen screen)
+    public void Navigate(Phone.Screen screen)
     {
 
         // Check if the screen exists
@@ -99,17 +69,51 @@ public class PhoneController : MonoBehaviour
         {
             throw new System.Exception("Screen " + screen.ToString() + " does not exist");
         }
+        
+        var animationFinished = Time.time - lastCoroutineTime > screenTransitionTime;
+        // Cancel current hide coroutine if any
+        if (!animationFinished)
+        {
+            StopAllCoroutines();
+        }
 
         // Hide the previous screen
         if (currentScreen != null)
         {
-            currentScreen.SetActive(false);
+            HideScreen(currentScreen, animationFinished);
         }
 
         // Show the new screen
-        screens[screen].SetActive(true);
         currentScreen = screens[screen];
-        setScreenTitle(Phone.ScreenTitles[screen]);
+        ShowScreen(currentScreen);
+        SetScreenTitle(Phone.ScreenTitles[screen]);
+    }
+
+    private void HideScreen(GameObject screen, bool animated = true)
+    {
+        screen.transform.localScale = new Vector3(0, 0, 0);
+
+        if (!animated)
+        {
+            screen.SetActive(false);
+            return;
+        }
+
+        lastCoroutineTime = Time.time;
+        var coroutine = DelayedSetActive(screen, false, screenTransitionTime);
+        StartCoroutine(coroutine);
+    }
+    
+    private void ShowScreen(GameObject screen)
+    {
+        screen.SetActive(true);
+        screen.LeanScale(new Vector3(1, 1, 1), screenTransitionTime).setEaseOutQuint();
+    }
+    
+    private IEnumerator DelayedSetActive(GameObject obj, bool active, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(active);
     }
 
 }

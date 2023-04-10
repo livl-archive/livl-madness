@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +8,10 @@ public class PlayerUI : NetworkBehaviour
 {
 
     private static bool paused = false;
-
-
+    
     private Player player;
-
     private NetworkManager networkManager;
     private PlayerController controller;
-
 
     [Header("Components")]
     [SerializeField] private GameObject pauseOverlay;
@@ -22,6 +20,11 @@ public class PlayerUI : NetworkBehaviour
     public static bool isPaused
     {
         get => paused;
+    }
+
+    private void Awake()
+    {
+        phoneController.AddPlayerUI(this);
     }
 
     private void Start()
@@ -58,11 +61,11 @@ public class PlayerUI : NetworkBehaviour
         pauseOverlay.SetActive(visible);
         if (isPaused)
         {
-            phoneController.navigate(Phone.Screen.Pause);
+            phoneController.Navigate(Phone.Screen.Pause);
         }
         else
         {
-            phoneController.navigate(Phone.Screen.ProductList);
+            phoneController.Navigate(Phone.Screen.ProductList);
         }
     }
 
@@ -78,4 +81,18 @@ public class PlayerUI : NetworkBehaviour
         }
     }
 
+    public PhoneController GetPhoneController()
+    {
+        return phoneController;
+    }
+    
+    public bool IsActualPlayer()
+    {
+        return controller.isLocalPlayer;
+    }
+
+    public void PlayNotificationSound()
+    {
+        controller.PlayIOSMessageSound();
+    }
 }

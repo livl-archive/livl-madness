@@ -4,14 +4,21 @@ using Mirror;
 public class PlayerShoot : NetworkBehaviour
 {
 
+    [Tooltip("The weapon used by the player")]
     public PlayerWeapon weapon;
 
     [SerializeField]
-    private Camera cam;
+    [Tooltip("The camera used to shoot")]
+    private GameObject cam;
 
     [SerializeField]
+    [Tooltip("The layer on which the raycast will be casted")]
     private LayerMask mask;
-
+    
+    [Header("Scanner Sound")]
+    [SerializeField] private AudioClip ScanningAudioClip;
+    [SerializeField] private AudioSource ScanningAudioSource;
+    
     void Start()
     {
         if (cam == null)
@@ -26,7 +33,7 @@ public class PlayerShoot : NetworkBehaviour
         if (PlayerUI.isPaused)
             return;
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1")) // if we click on the left mouse button
         {
             Shoot();
         }
@@ -37,12 +44,51 @@ public class PlayerShoot : NetworkBehaviour
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, weapon.range, mask))
         {
-            Debug.Log("On a touché " + hit.collider.name);
-
+            Debug.Log("Article scanné : " + hit.collider.name);
+            
+            // check if player has right click on his mouse to scan
+            if(GetComponent<InputManager>().Aiming)
+                PlayScanningAudio();
+            
             if (hit.collider.tag == "Player")
             {
 
             }
         }
     }
+    
+    private void PlayScanningAudio()
+    {
+        ScanningAudioSource.volume = 1f;
+        ScanningAudioSource.clip = ScanningAudioClip;
+        ScanningAudioSource.Play();
+    }
+    
+    /**
+     * TODO : Make the sound be also heard to all clients near the scanned article
+    [Command]
+    private void CmdPlayScanningAudio(Vector3 position)
+    {
+        RpcPlayScanningAudio(position);
+    }
+    
+    [ClientRpc]
+    private void RpcPlayScanningAudio(Vector3 position)
+    {
+        // Create an audio source object at the specified position
+        GameObject audioSourceObject = new GameObject("AudioSource");
+        audioSourceObject.transform.position = position;
+
+        // Add an AudioSource component to the object and configure it
+        AudioSource audioSource = audioSourceObject.AddComponent<AudioSource>();
+        audioSource.spatialBlend = 1f;
+        audioSource.minDistance = 0f;
+        audioSource.maxDistance = 5f;
+        audioSource.clip = ScanningAudioClip;
+        audioSource.Play();
+
+        // Destroy the audio source object after the clip has finished playing
+        Destroy(audioSourceObject, ScanningAudioClip.length);
+    }
+    **/
 }
