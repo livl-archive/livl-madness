@@ -20,6 +20,19 @@ public class PlayerScanController : MonoBehaviour
 
     public void Start()
     {
+        // Find store items controller
+        if (storeItemsController == null)
+        {
+            storeItemsController = FindObjectOfType<StoreItemsController>();
+        }
+        
+        // Find product list controller
+        if (productListController == null)
+        {
+            productListController = FindObjectOfType<ProductListController>();
+        }
+
+
         var storeItems = storeItemsController.GetItems()
             .OrderBy(a => random.Next());
 

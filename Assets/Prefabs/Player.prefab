@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 313954111192522216}
   - component: {fileID: 2925966898284264121}
   - component: {fileID: 4801751619637859672}
+  - component: {fileID: 1057198359927196222}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -333,6 +334,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df38e0ded3e754f6c820ee1927a93b24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
   AnimBlendSpeed: 8.9
   CameraRoot: {fileID: 0}
   Camera: {fileID: 0}
@@ -345,10 +349,17 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   AirResistance: 0.8
-  SpeedChangeRate: 10
   LandingAudioClip: {fileID: 0}
   FootstepAudioClips: []
-  FootstepAudioVolume: 0.5
+  IOSNotificationMessageClip: {fileID: 0}
+  AimRig: {fileID: 0}
+  AimRigWeight: 0
+  AimPosition: {fileID: 0}
+  AimSmoothSpeed: 20
+  AimLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  PlayerCamera: {fileID: 0}
 --- !u!114 &6923519442056867669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,6 +511,8 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 768
+  ScanningAudioClip: {fileID: 0}
+  ScanningAudioSource: {fileID: 0}
 --- !u!114 &4801751619637859672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,6 +529,22 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   username: Player
+  footStepRange: 4
+--- !u!114 &1057198359927196222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438772479995991687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad75340dd55448fda7d5b49bf30c4127, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storeItemsController: {fileID: 0}
+  productListController: {fileID: 0}
+  scanListSize: 4
 --- !u!1 &2438772480314387092
 GameObject:
   m_ObjectHideFlags: 0

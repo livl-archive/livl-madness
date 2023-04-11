@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,32 +15,34 @@ public class ProductListController : MonoBehaviour
 
     private List<ProductItemController> productItems = new List<ProductItemController>();
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-
         // For each child of productItemList, get the ProductItemController component
         foreach (Transform child in productItemsList.transform)
         {
             productItems.Add(child.GetComponent<ProductItemController>());
         }
-
+        
+        Debug.Log("ProductListController: " + productItems.Count + " product items found");
     }
 
+    // Start is called before the first frame update
     public void SetProducts(List<string> names)
     {
-
-        if (names.Count != productCount)
-        {
-            Debug.LogError("ProductListController: setProducts: names count is not equal to productCount");
-            return;
-        }
-
         for (int i = 0; i < productCount; i++)
         {
-            productItems[i].SetText(names[i]);
-            productItems[i].SetOutOfStock(false);
-            productItems[i].SetChecked(false);
+            if (names.Count > i)
+            {
+                productItems[i].SetText(names[i]);
+                productItems[i].SetOutOfStock(false);
+                productItems[i].SetChecked(false);
+            }
+            else
+            {
+                productItems[i].SetText("");
+                productItems[i].SetOutOfStock(false);
+                productItems[i].SetChecked(false);
+            }
         }
     }
 
