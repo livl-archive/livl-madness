@@ -24,17 +24,17 @@ public class ProductItemController
         checkboxImage = checkbox.GetComponent<Image>();
     }
 
-    public void setText(String text)
+    public void SetText(String text)
     {
         title.text = text;
     }
 
-    public void setOutOfStock(bool isOutOfStock)
+    public void SetOutOfStock(bool isOutOfStock)
     {
         outOfStock.gameObject.SetActive(isOutOfStock);
     }
 
-    public void setChecked(bool isChecked)
+    public void SetChecked(bool isChecked)
     {
         checkboxImage.sprite = isChecked ? checkedSprite : uncheckedSprite;
     }

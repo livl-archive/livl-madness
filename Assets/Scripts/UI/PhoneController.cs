@@ -11,6 +11,7 @@ public class PhoneController : MonoBehaviour
     [SerializeField] private TMP_Text screenTitle;
     [SerializeField] public MessageController messageController;
 
+    
     [Header("Screens")]
     [SerializeField] private GameObject productListScreen;
     [SerializeField] private GameObject pauseScreen;

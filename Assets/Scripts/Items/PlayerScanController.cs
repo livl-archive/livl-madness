@@ -9,13 +9,13 @@ public class PlayerScanController : MonoBehaviour
     private static System.Random random = new System.Random();
     
     [Header("Components")]
-    [SerializeField] StoreItemsController storeItemsController;
-    [SerializeField] PhoneController phoneController;
+    [SerializeField] private StoreItemsController storeItemsController;
+    [SerializeField] private ProductListController productListController;
     
     [Header("Configuration")]
-    [SerializeField] int scanListSize = 4;
+    [SerializeField] private int scanListSize = 4;
 
-    private Queue<GameObject> objectsToScan;
+    private Queue<GameObject> scanList;
     private List<GameObject> scannedObjects = new List<GameObject>();
 
     public void Start()
@@ -23,8 +23,9 @@ public class PlayerScanController : MonoBehaviour
         var storeItems = storeItemsController.GetItems()
             .OrderBy(a => random.Next());
 
-        objectsToScan = new Queue<GameObject>(storeItems);
-        
+        scanList = new Queue<GameObject>(storeItems);
+     
+        productListController.SetProducts(GetScanListNames());
     }
 
     public List<GameObject> GetScanList()
@@ -32,9 +33,9 @@ public class PlayerScanController : MonoBehaviour
         var scanList = new List<GameObject>();
         for (int i = 0; i < scanListSize; i++)
         {
-            if (objectsToScan.Count > 0)
+            if (this.scanList.Count > 0)
             {
-                scanList.Add(objectsToScan.Dequeue());
+                scanList.Add(this.scanList.Dequeue());
             }
         }
 
@@ -43,14 +44,23 @@ public class PlayerScanController : MonoBehaviour
 
     public Queue<GameObject> ScanItem(GameObject item)
     {
+        var itemIndex = scanList.ToList().FindIndex(a => a == item);
         scannedObjects.Add(item);
-        objectsToScan = new Queue<GameObject>(objectsToScan.Where(a => a != item));
-        return objectsToScan;
+        scanList = new Queue<GameObject>(scanList.Where(a => a != item));
+        productListController.CheckAndReplace(itemIndex, GetScanListNames());
+        return scanList;
     }
     
     public List<GameObject> GetScannedObjects()
     {
         return new List<GameObject>(scannedObjects);
+    }
+
+    public List<String> GetScanListNames()
+    {
+        return GetScanList()
+            .Select(a => a.name)
+            .ToList();
     }
 
 }

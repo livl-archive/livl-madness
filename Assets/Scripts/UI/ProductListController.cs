@@ -26,7 +26,7 @@ public class ProductListController : MonoBehaviour
 
     }
 
-    public void setProducts(List<string> names)
+    public void SetProducts(List<string> names)
     {
 
         if (names.Count != productCount)
@@ -37,34 +37,40 @@ public class ProductListController : MonoBehaviour
 
         for (int i = 0; i < productCount; i++)
         {
-            productItems[i].setText(names[i]);
-            productItems[i].setOutOfStock(false);
-            productItems[i].setChecked(false);
+            productItems[i].SetText(names[i]);
+            productItems[i].SetOutOfStock(false);
+            productItems[i].SetChecked(false);
         }
     }
 
-    public void updateProductStock(int productIndex, bool isOutOfStock)
+    public void UpdateProductStock(int productIndex, bool isOutOfStock)
     {
-        productItems[productIndex].setOutOfStock(isOutOfStock);
+        productItems[productIndex].SetOutOfStock(isOutOfStock);
     }
 
-    public void replaceProduct(int index, string name, bool isOutOfStock = false)
+    public void ReplaceProduct(int index, string name, bool isOutOfStock = false)
     {
-        productItems[index].setText(name);
-        productItems[index].setOutOfStock(false);
-        productItems[index].setChecked(isOutOfStock);
+        productItems[index].SetText(name);
+        productItems[index].SetOutOfStock(false);
+        productItems[index].SetChecked(isOutOfStock);
     }
 
-    private IEnumerator delayedProductReplacement(int index, string name)
+    private IEnumerator DelayedProductReplacement(int index, string name)
     {
         yield return new WaitForSeconds(checkAnimationDuration);
-        replaceProduct(index, name);
+        ReplaceProduct(index, name);
     }
 
-    public void checkAndReplaceProduct(int index, string nextProduct)
+    public void CheckAndReplace(int index, List<string> newList)
     {
-        productItems[index].setChecked(true);
-        StartCoroutine(delayedProductReplacement(index, nextProduct));
+        productItems[index].SetChecked(true);
+        
+        // Replace product after index & before productCount
+        for (int i = index + 1; i < productCount; i++)
+        { 
+            StartCoroutine(DelayedProductReplacement(index, newList[index]));
+        }
+        
     }
 
 }
