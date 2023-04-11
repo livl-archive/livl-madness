@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 public class StoreItemsController : MonoBehaviour
 {
-    public List<GameObject> items = new List<GameObject>();
-    public List<ShelfController> shelves = new List<ShelfController> ();
+    private List<GameObject> items = new List<GameObject>();
+    private List<ShelfController> shelves = new List<ShelfController> ();
 
     void Start()
     {
@@ -16,16 +17,22 @@ public class StoreItemsController : MonoBehaviour
         //    this.loadItems();
         //    Debug.Log("ITEMS LOADED COUNT : " + this.items.Count);
 
-        this.items.ForEach(item =>
+        items.ForEach(item =>
         {
             int rndItemIdx;
 
             do
             {
                 rndItemIdx = UnityEngine.Random.Range(0, shelves.Count);
-            } while (!this.shelves[rndItemIdx].isEmptySpaceAvailable());
+            } while (!shelves[rndItemIdx].isEmptySpaceAvailable());
 
-            this.shelves[rndItemIdx].setItem(item);
+            shelves[rndItemIdx].setItem(item);
         });
     }
+    
+    public List<GameObject> GetItems()
+    {
+        return new List<GameObject>(items);
+    }
+    
 }
