@@ -11,13 +11,14 @@ public class PlayerScanController : MonoBehaviour
     [Header("Components")]
     [SerializeField] private StoreItemsController storeItemsController;
     [SerializeField] private ProductListController productListController;
+    [SerializeField] private PlayerScore playerScore;
     
     [Header("Configuration")]
     [SerializeField] private int scanListSize = 4;
 
     private Queue<GameObject> scanList;
     private List<GameObject> scannedObjects = new List<GameObject>();
-
+    
     public void Start()
     {
         // Find store items controller
@@ -30,6 +31,12 @@ public class PlayerScanController : MonoBehaviour
         if (productListController == null)
         {
             productListController = FindObjectOfType<ProductListController>();
+        }
+        
+        // Find player score
+        if (playerScore == null)
+        {
+            playerScore = FindObjectOfType<PlayerScore>();
         }
 
 
@@ -55,7 +62,7 @@ public class PlayerScanController : MonoBehaviour
         return scanList;
     }
 
-    public bool ScanItem(GameObject item)
+    public bool Scan(GameObject item)
     {
         
         // Check if item is in the 4 first items
@@ -72,6 +79,7 @@ public class PlayerScanController : MonoBehaviour
         
         scanList = new Queue<GameObject>(scanList.Where(a => a != item));
         productListController.CheckAndReplace(itemIndex, GetScanListNames());
+        playerScore.Increment(1);
         
         return true;
     }

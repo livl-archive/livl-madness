@@ -58,7 +58,7 @@ public class PlayerShoot : NetworkBehaviour
             if (inputManager.Aiming && hit.collider.CompareTag("Product"))
             {
                 PlayScanningAudio();
-                bool scanResult = playerScanController.ScanItem(hit.collider.gameObject);
+                bool scanResult = playerScanController.Scan(hit.collider.gameObject);
 
                 if (!scanResult)
                 {
