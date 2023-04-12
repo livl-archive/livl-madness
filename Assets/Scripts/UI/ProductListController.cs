@@ -31,18 +31,7 @@ public class ProductListController : MonoBehaviour
     {
         for (int i = 0; i < productCount; i++)
         {
-            if (names.Count > i)
-            {
-                productItems[i].SetText(names[i]);
-                productItems[i].SetOutOfStock(false);
-                productItems[i].SetChecked(false);
-            }
-            else
-            {
-                productItems[i].SetText("");
-                productItems[i].SetOutOfStock(false);
-                productItems[i].SetChecked(false);
-            }
+            ReplaceProduct(i, names.Count > i ? names[i] : "");
         }
     }
 

@@ -19,7 +19,7 @@ public class ProductItemController
 
     private Image checkboxImage;
 
-    public void Start()
+    public void Awake()
     {
         checkboxImage = checkbox.GetComponent<Image>();
     }
