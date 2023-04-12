@@ -20,6 +20,7 @@ public class PlayerShoot : NetworkBehaviour
     [SerializeField] private AudioSource ScanningAudioSource;
     
     private PlayerScanController playerScanController;
+    private InputManager inputManager;
     
     void Start()
     {
@@ -30,6 +31,7 @@ public class PlayerShoot : NetworkBehaviour
         }
         
         playerScanController = GetComponent<PlayerScanController>();
+        inputManager = GetComponent<InputManager>();
         
     }
 
@@ -53,13 +55,18 @@ public class PlayerShoot : NetworkBehaviour
             Debug.Log("Hit " + hitName);
 
             // check if player has right click on his mouse to scan
-            if(GetComponent<InputManager>().Aiming)
-                PlayScanningAudio();
-            
-            if (hit.collider.tag == "Product")
+            if (inputManager.Aiming && hit.collider.CompareTag("Product"))
             {
-                playerScanController.ScanItem(hit.collider.gameObject);
+                PlayScanningAudio();
+                bool scanResult = playerScanController.ScanItem(hit.collider.gameObject);
+
+                if (!scanResult)
+                {
+                    Debug.Log("This product is not in your scan list !");
+                }
+                
             }
+
         }
     }
     

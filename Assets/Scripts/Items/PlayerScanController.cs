@@ -55,13 +55,25 @@ public class PlayerScanController : MonoBehaviour
         return scanList;
     }
 
-    public Queue<GameObject> ScanItem(GameObject item)
+    public bool ScanItem(GameObject item)
     {
-        var itemIndex = scanList.ToList().FindIndex(a => a == item);
+        
+        // Check if item is in the 4 first items
+        var displayedScanList = GetScanList().GetRange(0,4);
+        var isItemInScanList = scanList.Contains(item);
+        
+        if (!isItemInScanList)
+        {
+            return false;
+        }
+        
+        var itemIndex = displayedScanList.FindIndex(a => a == item);
         scannedObjects.Add(item);
+        
         scanList = new Queue<GameObject>(scanList.Where(a => a != item));
         productListController.CheckAndReplace(itemIndex, GetScanListNames());
-        return scanList;
+        
+        return true;
     }
     
     public List<GameObject> GetScannedObjects()
