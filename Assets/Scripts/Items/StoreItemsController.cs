@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class StoreItemsController : MonoBehaviour
 {
-    private List<GameObject> items = new List<GameObject>();
-    private List<ShelfController> shelves = new List<ShelfController> ();
+    [SerializeField] private List<GameObject> items = new List<GameObject>();
+    [SerializeField] private List<ShelfController> shelves = new List<ShelfController> ();
 
     void Start()
     {

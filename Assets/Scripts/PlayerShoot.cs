@@ -19,6 +19,8 @@ public class PlayerShoot : NetworkBehaviour
     [SerializeField] private AudioClip ScanningAudioClip;
     [SerializeField] private AudioSource ScanningAudioSource;
     
+    private PlayerScanController playerScanController;
+    
     void Start()
     {
         if (cam == null)
@@ -26,6 +28,9 @@ public class PlayerShoot : NetworkBehaviour
             Debug.LogError("Aucune caméra associé au système de tir.");
             this.enabled = false;
         }
+        
+        playerScanController = GetComponent<PlayerScanController>();
+        
     }
 
     private void Update()
@@ -44,15 +49,16 @@ public class PlayerShoot : NetworkBehaviour
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, weapon.range, mask))
         {
-            Debug.Log("Article scanné : " + hit.collider.name);
-            
+            var hitName = hit.collider.name;
+            Debug.Log("Hit " + hitName);
+
             // check if player has right click on his mouse to scan
             if(GetComponent<InputManager>().Aiming)
                 PlayScanningAudio();
             
-            if (hit.collider.tag == "Player")
+            if (hit.collider.tag == "Product")
             {
-
+                playerScanController.ScanItem(hit.collider.gameObject);
             }
         }
     }
