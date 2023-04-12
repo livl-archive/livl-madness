@@ -10,7 +10,7 @@ public class PhoneController : MonoBehaviour
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private TMP_Text screenTitle;
     [SerializeField] public MessageController messageController;
-
+    [SerializeField] private TMP_Text scoreText;
     
     [Header("Screens")]
     [SerializeField] private GameObject productListScreen;
@@ -32,6 +32,8 @@ public class PhoneController : MonoBehaviour
     void Start()
     {   
         GenerateScreens();
+        
+        SetScoreText("0");
 
         // Hide all screens
         foreach (GameObject screen in screens.Values)
@@ -117,4 +119,9 @@ public class PhoneController : MonoBehaviour
         obj.SetActive(active);
     }
 
+    public void SetScoreText(string score)
+    {
+        scoreText.text = score;
+    }
+    
 }

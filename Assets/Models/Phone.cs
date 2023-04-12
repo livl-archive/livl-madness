@@ -12,7 +12,7 @@ public static class Phone
 
     public static Dictionary<Screen, string> ScreenTitles = new Dictionary<Screen, string>
     {
-        { Screen.ProductList, "Shopping List" },
+        { Screen.ProductList, "" },
         { Screen.Pause, "Paused" },
     };
 }
