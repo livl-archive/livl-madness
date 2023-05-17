@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
     private const string playerIdPrefix = "Player";
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-
+    private static Dictionary<string, PhoneController> phoneControllers = new Dictionary<string, PhoneController>();
+    
     //public MatchSettings matchSettings;
 
     public static GameManager instance;
@@ -19,6 +20,11 @@ public class GameManager : MonoBehaviour
     public delegate void OnPlayerKilledCallback(string player, string source);
     public OnPlayerKilledCallback onPlayerKilledCallback;
 
+    private static string MakePlayerId(uint netId)
+    {
+        return playerIdPrefix + netId;
+    }
+    
     private void Awake()
     {
         if(instance == null)
@@ -40,16 +46,25 @@ public class GameManager : MonoBehaviour
         sceneCamera.SetActive(isActive);
     }
     
-    public static void RegisterPlayer(string netID, Player player)
+    public static void RegisterPlayer(uint netID, Player player)
     {
-        string playerId = playerIdPrefix + netID;
+        var playerId = MakePlayerId(netID);
         players.Add(playerId, player);
         player.transform.name = playerId;
+    }
+    
+    public static void RegisterPhoneController(uint netID, PhoneController controller)
+    {
+        phoneControllers.Add(MakePlayerId(netID), controller);
+        
+        // TODO : remove test
+        controller.messageController.ShowMessage("Jean Marc Muller", "Salut, ça va ?");
     }
 
     public static void UnregisterPlayer(string playerId)
     {
         players.Remove(playerId);
+        phoneControllers.Remove(playerId);
     }
 
     public static Player GetPlayer(string playerId)

@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
 public class PlayerSetup : NetworkBehaviour
 {
-    
     [SerializeField]
     Behaviour[] componentsToDisable;
     
@@ -14,6 +11,8 @@ public class PlayerSetup : NetworkBehaviour
     
     [SerializeField]
     private GameObject playerUIPrefab;
+    
+    [HideInInspector]
     public GameObject playerUIInstance;
     
     Camera sceneCamera;
@@ -42,7 +41,10 @@ public class PlayerSetup : NetworkBehaviour
                 ui.SetPlayer(GetComponent<Player>());
             }
 
-            GetComponent<Player>().Setup();
+            var player = GetComponent<Player>();
+            GameManager.RegisterPlayer(player.GetNetId(), player);
+            GameManager.RegisterPhoneController(player.GetNetId(), ui.GetPhoneController());
+            player.Setup();
         }
     }
     
